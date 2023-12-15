@@ -96,3 +96,13 @@ prop_from_map_and_to_map() ->
 			JWKSet = jose_jwk:from_map(JWKSetMap),
 			JWKSetMap =:= element(2, jose_jwk:to_map(JWKSet))
 		end).
+
+prop_from_map_and_to_public_map() ->
+	?FORALL({JWKs, JWKSetMap},
+		?LET({{JWKs, JWKSetMap}, Extras},
+			{jwk_set_map(), binary_map()},
+			{JWKs, maps:merge(Extras, JWKSetMap)}),
+		begin
+			{_, PublicJWKSet} = jose_jwk:to_public_map(jose_jwk:from_map(JWKSetMap)),
+			#{<<"keys">> => [jose_jwk:to_public_map(Key) || Key <- JWKs]} =:= PublicJWKSet
+		end).
