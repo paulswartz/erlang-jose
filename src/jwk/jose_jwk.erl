@@ -734,6 +734,8 @@ to_public_map(List) when is_list(List) ->
 	[to_public_map(Element) || Element <- List];
 to_public_map(#jose_jwk{kty={Module, KTY}, fields=Fields}) ->
 	{#{ kty => Module }, Module:to_public_map(KTY, Fields)};
+to_public_map(#jose_jwk{keys={Module, KEYS}, fields=Fields}) ->
+	{#{ keys => Module }, Fields#{<<"keys">> => to_public_map(KEYS)}};
 to_public_map(Other) ->
 	to_public_map(from(Other)).
 

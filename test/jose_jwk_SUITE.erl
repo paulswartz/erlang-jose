@@ -51,6 +51,7 @@
 -export([kty_rsa_block_encrypt_and_block_decrypt/1]).
 -export([kty_rsa_sign_and_verify/1]).
 -export([set_from_map_and_to_map/1]).
+-export([set_from_map_and_to_public_map/1]).
 
 all() ->
 	[
@@ -125,7 +126,8 @@ groups() ->
 			kty_rsa_sign_and_verify
 		]},
 		{jose_jwk_set, [parallel], [
-			set_from_map_and_to_map
+			set_from_map_and_to_map,
+			set_from_map_and_to_public_map
 		]}
 	].
 
@@ -328,4 +330,9 @@ kty_rsa_sign_and_verify(Config) ->
 set_from_map_and_to_map(Config) ->
 	ct_property_test:quickcheck(
 		jose_jwk_set_props:prop_from_map_and_to_map(),
+		Config).
+
+set_from_map_and_to_public_map(Config) ->
+	ct_property_test:quickcheck(
+		jose_jwk_set_props:prop_from_map_and_to_public_map(),
 		Config).
